@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passwortgeschützt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha256.js"></script>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        img {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gib das Passwort ein</h1>
+        <img src="schloss.png" alt="Schloss Bild">
+        <br><br>
+        <form id="passwordForm">
+            <input type="password" id="password" placeholder="Passwort eingeben">
+            <button type="submit">Absenden</button>
+        </form>
+        <p id="error" style="color:red; display:none;">Falsches Passwort!</p>
+    </div>
+
+    <script>
+        document.getElementById('passwordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var password = document.getElementById('password').value;
+
+            // Hashe das Passwort
+            var shaObj = new jsSHA("SHA-256", "TEXT");
+            shaObj.update(password);
+            var hash = shaObj.getHash("HEX");
+
+            // Der gespeicherte Hash des korrekten Passworts
+            var correctHash = "3e2d7ad3c4d9fb93a8e5c0041875e8cd84ce94fbeae31c59e4544945a9ee564e";
+
+            if (hash === correctHash) {
+                window.location.href = "treasure.html";
+            } else {
+                document.getElementById('error').style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
